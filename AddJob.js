@@ -1,16 +1,18 @@
 import React from "react"
 import { SafeAreaView, View, Text, Pressable, StyleSheet, StatusBar, Image, TextInput } from "react-native"
 import Entypo from '@expo/vector-icons/Entypo';
-import { useDispatch } from "react-redux"
-import { addTodo } from "./todoSlice"
+// import { useDispatch } from "react-redux"
+// import { addTodo } from "./todoSlice"
+import { addToDo } from "./api"
 
 const AddJob = ( {navigation} ) => {
   const [typeJob, setTypeJob] = React.useState("")
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
   const clickUpdate = async () => {
     const newTodo = { todo_id: Date.now(), todo_name: typeJob }
-    dispatch(addTodo(newTodo))
+    // dispatch(addTodo(newTodo))
+    await addToDo(newTodo)
     navigation.goBack()    
   }
 

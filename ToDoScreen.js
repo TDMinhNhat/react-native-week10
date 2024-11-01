@@ -1,22 +1,34 @@
 import React from "react";
 import { SafeAreaView, View, Text, TextInput, Pressable, StyleSheet, StatusBar, FlatList, Image, ScrollView, Button } from "react-native"
 import Fontisto from '@expo/vector-icons/Fontisto';
-import axios from "axios"
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { useDispatch, useSelector } from "react-redux"
-import { fetchTodo, updateTodo } from "./todoSlice"
+// import { useDispatch, useSelector } from "react-redux"
+// import { fetchTodo, updateTodo } from "./todoSlice"
+import { useRecoilState } from "recoil"
+import { todoAtom } from "./todoAtom" 
+import { fetchTodo, updateTodo } from "./api"
 
 const ToDoScreen = ({ navigation }) => {
 
+  const [todo, setTodo] = useRecoilState(todoAtom)
   const [idUpdate, setIdUpdate] = React.useState('')
   const [textUpdate, setTextUpdate] = React.useState('')
-  const dispatch = useDispatch()
-  const { items } = useSelector((state) => state.todo)
+  // const dispatch = useDispatch()
+  // const { items } = useSelector((state) => state.todo)
 
-  React.useEffect(() => {
-    dispatch(fetchTodo())
-  }, [dispatch])
+  // React.useEffect(() => {
+  //   dispatch(fetchTodo())
+  // }, [dispatch])
   
+  React.useEffect(() => {
+    const loadTodo = async () => {
+      const todoData = await fetchTodo();
+      setTodo(todoData)
+    }
+
+    loadTodo()
+  }, [setTodo])
+
   const addToDo = () => {
     navigation.navigate("AddJob")
   }
@@ -49,7 +61,7 @@ const ToDoScreen = ({ navigation }) => {
     <View style={[style.item, style.todo]}>
       <ScrollView style={{height: 400, width: "100%"}}>
       <FlatList
-        data={items}
+        data={todo}
         keyExtractor={item => item.todo_id.toString()}
         renderItem={({ item }) => renderItem(item)}
       />
